@@ -96,17 +96,17 @@ public class Grid implements Iterable<Cell> {
         List<Cell> neighbours = new ArrayList<>();
 
 
-        neighbours.add(getCell(rowIndex + 1,columnIndex - 1));
-        neighbours.add(getCell(rowIndex,columnIndex - 1));
-        neighbours.add(getCell(rowIndex - 1,columnIndex - 1));
+        neighbours.add(getCell(rowIndex + 1, columnIndex - 1));
+        neighbours.add(getCell(rowIndex, columnIndex - 1));
+        neighbours.add(getCell(rowIndex - 1, columnIndex - 1));
 
-        neighbours.add(getCell(rowIndex + 1,columnIndex ));
-        neighbours.add(getCell(rowIndex - 1,columnIndex ));
+        neighbours.add(getCell(rowIndex + 1, columnIndex));
+        neighbours.add(getCell(rowIndex - 1, columnIndex));
 
 
-        neighbours.add(getCell(rowIndex + 1,columnIndex+1) );
-        neighbours.add(getCell(rowIndex ,columnIndex+1 ));
-        neighbours.add(getCell(rowIndex - 1,columnIndex+1 ));
+        neighbours.add(getCell(rowIndex + 1, columnIndex + 1));
+        neighbours.add(getCell(rowIndex, columnIndex + 1));
+        neighbours.add(getCell(rowIndex - 1, columnIndex + 1));
 
         return neighbours;
     }
@@ -115,11 +115,10 @@ public class Grid implements Iterable<Cell> {
     // TODO: Écrire une version correcte de cette méthode.
     private int countAliveNeighbours(int rowIndex, int columnIndex) {
 
-       int count=0;
-               for(Cell cell : getNeighbours(rowIndex, columnIndex))
-        {
+        int count = 0;
+        for (Cell cell : getNeighbours(rowIndex, columnIndex)) {
             if (cell.isAlive())
-                count=count+1;
+                count = count + 1;
             else
                 return count;
         }
@@ -130,26 +129,47 @@ public class Grid implements Iterable<Cell> {
     private CellState calculateNextState(int rowIndex, int columnIndex) {
         Cell cell = getCell(rowIndex, columnIndex);
 
-            if (!cell.isAlive() && countAliveNeighbours(rowIndex, columnIndex)==3)
-                cell.setState(ALIVE);
-            else if (!(cell.isAlive() && (countAliveNeighbours(rowIndex, columnIndex)== 2 || countAliveNeighbours(rowIndex, columnIndex)== 3)))
+        if (!cell.isAlive()){
+          if (countAliveNeighbours(rowIndex, columnIndex) == 3)
+            return ALIVE;
+        }
+         if (cell.isAlive())
+                 if (countAliveNeighbours(rowIndex, columnIndex) == 2)
+                     return ALIVE;
+                  if (countAliveNeighbours(rowIndex, columnIndex) == 3)
+            return ALIVE;
+        else
+        return DEAD;
 
-                cell.setState(DEAD);
-
-
-        return null;
     }
-
 
 
     // TODO: Écrire une version correcte de cette méthode.
     private CellState[][] calculateNextStates() {
         CellState[][] nextCellState = new CellState[getNumberOfRows()][getNumberOfColumns()];
+        for (int r = 0; r < getNumberOfRows(); r++) {
+            for (int c = 0; c < getNumberOfColumns(); c++) {
+
+                nextCellState[r][c] = calculateNextState(r, c);
+            }
+
+        }
         return nextCellState;
     }
 
     // TODO: Écrire une version correcte de cette méthode.
     private void updateStates(CellState[][] nextState) {
+
+        for (int r = 0; r < getNumberOfRows(); r = r + 1) {
+            for (int c = 0; c < getNumberOfColumns(); c = c + 1) {
+                Cell cell = getCell(r, c);
+                if (calculateNextState(r, c) == ALIVE && cell.getState() == DEAD)
+                    cell.setState(ALIVE);
+                else if (calculateNextState(r, c) == DEAD && cell.getState() == ALIVE)
+                    cell.setState(DEAD);
+            }
+
+        }
 
     }
 
@@ -168,6 +188,7 @@ public class Grid implements Iterable<Cell> {
      */
     // TODO: Écrire une version correcte de cette méthode.
     void updateToNextGeneration() {
+        updateStates(calculateNextStates());
 
     }
 
@@ -176,7 +197,14 @@ public class Grid implements Iterable<Cell> {
      */
     // TODO: Écrire une version correcte de cette méthode.
     void clear() {
+        for (int r = 0; r < getNumberOfRows(); r = r + 1) {
+            for (int c = 0; c < getNumberOfColumns(); c = c + 1) {
+                Cell cell = getCell(r, c);
+                cell.setState(DEAD);
 
+
+            }
+        }
     }
 
     /**
@@ -187,6 +215,15 @@ public class Grid implements Iterable<Cell> {
      */
     // TODO: Écrire une version correcte de cette méthode.
     void randomGeneration(Random random) {
+        for (int r = 0; r < getNumberOfRows(); r = r + 1) {
+            for (int c = 0; c < getNumberOfColumns(); c = c + 1) {
+                Cell cell = getCell(r, c);
 
+                if (random.nextBoolean() == true) {
+                    cell.setState(ALIVE);
+                } else cell.setState(DEAD);
+
+            }
+        }
     }
 }
