@@ -1,8 +1,6 @@
 package model;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -91,7 +89,33 @@ public class Grid implements Iterable<Cell> {
 
     // TODO: Écrire une version correcte de cette méthode.
     private List<Cell> getNeighbours(int rowIndex, int columnIndex) {
-        return null;
+        ArrayList<Cell> neighbours = new ArrayList<>();
+
+        int rowMinimum = rowIndex - 1;
+        int rowMaximum = rowIndex + 1;
+        int columnMinimum = columnIndex - 1;
+        int columnMaximum = columnIndex + 1;
+        neighbours.add(columnMinimum,rowMinimum),
+                {columnMinimum,rowMinimum},
+            {columnMinimum,rowIndex},
+            {columnMinimum,rowMaximum},
+
+            {columnIndex,rowMinimum},
+            {columnIndex,rowMaximum},
+
+            {columnMaximum,rowMinimum},
+            {columnMaximum,rowIndex},
+            {columnMaximum,rowMaximum};
+
+        return;
+    }
+    private static List<int[,]> getNeigbores(int[,] matrix, int row, int column)
+    {
+        List<int[]> result = new List<int[]>;
+
+        List
+
+        return result;
     }
 
     // TODO: Écrire une version correcte de cette méthode.
