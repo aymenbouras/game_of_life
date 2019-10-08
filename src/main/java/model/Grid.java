@@ -2,6 +2,9 @@ package model;
 
 import java.util.*;
 
+import static model.CellState.ALIVE;
+import static model.CellState.DEAD;
+
 
 /**
  * {@link Grid} instances represent the grid in <i>The Game of Life</i>.
@@ -89,42 +92,51 @@ public class Grid implements Iterable<Cell> {
 
     // TODO: Écrire une version correcte de cette méthode.
     private List<Cell> getNeighbours(int rowIndex, int columnIndex) {
-        ArrayList<Cell> neighbours = new ArrayList<>();
 
-        int rowMinimum = rowIndex - 1;
-        int rowMaximum = rowIndex + 1;
-        int columnMinimum = columnIndex - 1;
-        int columnMaximum = columnIndex + 1;
-        neighbours.add(columnMinimum,rowMinimum),
-                {columnMinimum,rowMinimum},
-            {columnMinimum,rowIndex},
-            {columnMinimum,rowMaximum},
+        List<Cell> neighbours = new ArrayList<>();
 
-            {columnIndex,rowMinimum},
-            {columnIndex,rowMaximum},
 
-            {columnMaximum,rowMinimum},
-            {columnMaximum,rowIndex},
-            {columnMaximum,rowMaximum};
+        neighbours.add(getCell(rowIndex + 1,columnIndex - 1));
+        neighbours.add(getCell(rowIndex,columnIndex - 1));
+        neighbours.add(getCell(rowIndex - 1,columnIndex - 1));
 
-        return;
+        neighbours.add(getCell(rowIndex + 1,columnIndex ));
+        neighbours.add(getCell(rowIndex - 1,columnIndex ));
+
+
+        neighbours.add(getCell(rowIndex + 1,columnIndex+1) );
+        neighbours.add(getCell(rowIndex ,columnIndex+1 ));
+        neighbours.add(getCell(rowIndex - 1,columnIndex+1 ));
+
+        return neighbours;
     }
-    private static List<int[,]> getNeigbores(int[,] matrix, int row, int column)
-    {
-        List<int[]> result = new List<int[]>;
 
-        List
-
-        return result;
-    }
 
     // TODO: Écrire une version correcte de cette méthode.
     private int countAliveNeighbours(int rowIndex, int columnIndex) {
-        return 0;
+
+       int count=0;
+               for(Cell cell : getNeighbours(rowIndex, columnIndex))
+        {
+            if (cell.isAlive())
+                count=count+1;
+            else
+                return count;
+        }
+        return count;
     }
 
     // TODO: Écrire une version correcte de cette méthode.
     private CellState calculateNextState(int rowIndex, int columnIndex) {
+        Cell cell = getCell(rowIndex, columnIndex);
+
+            if (!cell.isAlive() && countAliveNeighbours(rowIndex, columnIndex)==3)
+                cell.setState(ALIVE);
+            else if (!(cell.isAlive() && (countAliveNeighbours(rowIndex, columnIndex)== 2 || countAliveNeighbours(rowIndex, columnIndex)== 3)))
+
+                cell.setState(DEAD);
+
+
         return null;
     }
 
